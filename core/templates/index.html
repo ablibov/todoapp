@@ -1,0 +1,287 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="{% static 'favicon4.svg' %}">
+</head>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+body, html {
+    background: #3F5EFB;
+    background: -webkit-linear-gradient(26deg, rgba(63, 94, 251, 1) 0%, rgba(255, 84, 84, 1) 100%);
+    background: -moz-linear-gradient(26deg, rgba(63, 94, 251, 1) 0%, rgba(255, 84, 84, 1) 100%);
+    background: linear-gradient(26deg, rgba(63, 94, 251, 1) 0%, rgba(255, 84, 84, 1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#3F5EFB", endColorstr="#FF5454", GradientType=0);
+    min-height: 100%;
+    min-height: 100vh;
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+}
+
+.zadacha {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    width: 90%;
+    height: 150px;
+    margin: 0 auto;
+background: #833AB4;
+background: -webkit-linear-gradient(210deg, rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%);
+background: -moz-linear-gradient(210deg, rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%);
+background: linear-gradient(210deg, rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#833AB4", endColorstr="#FCB045", GradientType=0);    border-radius: 25px;
+    color: white;
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+
+    margin-top: 20px;
+    
+}
+
+.zadacha::before,
+.zadacha::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    background: rgb(255, 255, 255);
+    border-radius: 50%;
+    filter: blur(59px);
+}
+
+.zadacha::before {
+    width: 160px;
+    height: 100px;
+    animation: float1 15s ease-in-out infinite;
+}
+
+.zadacha::after {
+    width: 120px;
+    height: 180px;
+    animation: float2 17s ease-in-out infinite;
+}
+
+
+@keyframes float1 {
+    0% {
+        left: -50px;
+        top: -30px;
+        transform: rotate(0deg);
+    }
+
+    35% {
+        left: 45%;
+        top: 35%;
+        transform: rotate(120deg);
+    }
+
+    65% {
+        left: 70%;
+        top: -10px;
+        transform: rotate(240deg);
+    }
+
+    100% {
+        left: -50px;
+        top: -30px;
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes float2 {
+    0% {
+        right: -40px;
+        bottom: -50px;
+        transform: rotate(0deg);
+    }
+
+    35% {
+        right: 40%;
+        bottom: 20%;
+        transform: rotate(-120deg);
+    }
+
+    65% {
+        right: 70%;
+        bottom: -40px;
+        transform: rotate(-240deg);
+    }
+
+    100% {
+        right: -40px;
+        bottom: -50px;
+        transform: rotate(-360deg);
+    }
+}
+
+#add {
+  position: fixed;
+  bottom: 20px;
+  left: 20px; 
+  z-index: 100;
+}
+
+.create-task {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+
+    display: none;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 1000;
+}
+
+a {
+    text-decoration: none !important;
+}
+
+.create-task.show {
+    display: flex;
+}
+
+.create-task-window {
+    width: 350px;
+    padding: 25px;
+
+    background: #833AB4;
+background: -webkit-linear-gradient(210deg, rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%);
+background: -moz-linear-gradient(210deg, rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%);
+background: linear-gradient(210deg, rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#833AB4", endColorstr="#FCB045", GradientType=0);
+    border-radius: 20px;
+    color: black;
+
+    animation: popup 0.25s ease;
+}
+
+.create-task-window input {
+    width: 100%;
+    padding: 12px;
+    box-sizing: border-box;
+    margin-bottom: 15px;
+}
+
+@keyframes popup {
+    from {
+        transform: scale(0.8) translateY(30px);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+}
+
+.status-form {
+    margin-right: 20px;
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 29px;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 65px;
+    height: 35px;
+}
+
+.switch input {
+    display: none;
+}
+
+.slider {
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,.35);
+    border-radius: 40px;
+    transition: .3s;
+}
+
+.slider::before {
+    content: "";
+    position: absolute;
+    width: 27px;
+    height: 27px;
+    left: 4px;
+    top: 4px;
+    background: white;
+    border-radius: 50%;
+    transition: .3s;
+}
+
+.switch input:checked + .slider {
+    background: #00ff99;
+}
+
+.switch input:checked + .slider::before {
+    transform: translateX(30px);
+}
+
+</style>
+<body>
+    <div class="create-task" id="create-task">
+    <form method="POST" class="create-task-window">
+        {% csrf_token %}
+        <h2 style="color: white; text-shadow: 2px 2px 4px rgba(255, 84, 84, 1);">Add task</h2>
+
+        <input name="title" style="border: none; border-radius: 10px; padding: 15px;" type="text" placeholder="Task name">
+        <input name="description" style="border: none; border-radius: 10px; height: 125px !important; padding: 15px;" type="text" placeholder="Description">
+
+        <button type="submit" style="border-radius: 20px; border: none; padding: 10px; background-color: black; color: white;">Add</button>
+        <button type="button" style="border-radius: 20px; border: none; padding: 10px; background-color: black; color: white;" id="close">Close</button>
+    </form>
+</div>
+
+<h1 style="text-align: center; color: white; font-size: 50px; text-shadow: 2px 2px 4px rgba(255, 84, 84, 1);">My Tasks:</h1>
+
+<ul>
+    {% for task in tasks %}
+        <a href="{% url 'detail' task.id %}">
+            <li class="zadacha">
+                <p style="font-size: 29px; margin-left: 20px;">
+                    Title: {{ task.title }}
+                </p>
+            <form class="status-form" method="POST" action="{% url 'change_status' task.id %}">
+        {% csrf_token %}
+           <span>Status:</span>
+            <label class="switch">
+        <input type="checkbox"
+               onchange="this.form.submit()"
+               {% if task.complited %}checked{% endif %}>
+         <span class="slider"></span>
+       </label>
+    </form>
+            </li>
+        </a>
+    {% endfor %}
+</ul>
+    <button id="add" style="border: none; background-color: rgba(255, 84, 84, 1); padding: 20px; border-radius: 5px;"><i style="color: white; font-size: 25px;" class="fa-solid fa-plus"></i></button>
+
+    <script>
+const addButton = document.querySelector('#add');
+const modal = document.querySelector('#create-task');
+const closeButton = document.querySelector('#close');
+
+addButton.onclick = function () {
+    modal.classList.add('show');
+};
+
+closeButton.onclick = function () {
+    modal.classList.remove('show');
+};
+</script>
+</body>
+</html>
